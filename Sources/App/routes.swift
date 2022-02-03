@@ -5,7 +5,12 @@ func routes(_ app: Application) throws {
         return "It works!"
     }
 
-    app.get("hello") { req -> String in
-        return "Hello, world!"
+    app.post("bookmark") { req -> EventLoopFuture<Bookmark> in
+        let bookmark = try req.content.decode(Bookmark.self)
+        return bookmark.create(on: req.db).map { bookmark }
+    }
+    
+    app.get("bookmark") { req -> EventLoopFuture<[Bookmark]> in
+        Bookmark.query(on: req.db).all()
     }
 }

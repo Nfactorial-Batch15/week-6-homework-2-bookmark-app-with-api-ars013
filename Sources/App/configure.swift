@@ -1,10 +1,9 @@
 import Vapor
+import Fluent
+import FluentPostgresDriver
 
-// configures your application
 public func configure(_ app: Application) throws {
-    // uncomment to serve files from /Public folder
-    // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
-
-    // register routes
+    app.databases.use(.postgres(hostname: "localhost", username: "arslan", password: ""), as: .psql)
+    app.migrations.add(Migration_1(), to: .psql)
     try routes(app)
 }
